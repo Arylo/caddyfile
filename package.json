@@ -2,18 +2,26 @@
   "name": "caddyfile",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
+    "prebuild": "rimraf dist/*",
+    "build": "tsc -p tsconfig.prod.json",
     "test": "c8 ava"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Arylo/caddyfile.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": [
+    "Caddy",
+    "Caddyfile",
+    "parse",
+    "stringify",
+    "parser"
+  ],
+  "author": "AryloYeung <arylo.open@gmail.com>",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/Arylo/caddyfile/issues"
   },
@@ -23,19 +31,20 @@
     "c8": "^7.12.0",
     "eslint": "^8.23.0",
     "eslint-config-tencent": "^1.0.4",
+    "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
     "typescript": "^4.8.2"
   },
   "ava": {
     "files": [
-			"src/**/*.spec.ts",
-			"test/**/*.spec.ts"
-		],
-		"extensions": [
-			"ts"
-		],
-		"require": [
-			"ts-node/register"
-		]
-	}
+      "src/**/*.spec.ts",
+      "test/**/*.spec.ts"
+    ],
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  }
 }

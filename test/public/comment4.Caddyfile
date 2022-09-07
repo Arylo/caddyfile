@@ -1,0 +1,3 @@
+example.com {
+    file_server /static # This is a test comment
+}

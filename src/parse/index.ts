@@ -1,4 +1,5 @@
 import AstType from '../AstType'
+import { IBlock, IAST } from '../type'
 
 const isEnd = (c: string) => c === '\n'
 
@@ -42,17 +43,11 @@ const parseBlocksByLines = (lines: string[]) => {
     return blocks
 }
 
-interface IBlock {
-    content: string,
-    comment?: string,
-    children: IBlock[],
-}
-
 const parseBlock = (block: string[]): IBlock => {
     if (!block[0].includes('{')) {
         const matches = /^(?<content>[^#]*?)#(?<comment>.*)$/.exec(block[0].trim())
-        const content = (matches ?  matches.groups?.content : block[0]) as string
-        const comment = matches ? matches.groups?.comment.trim(): undefined
+        const content = (matches?.groups?.content ?? block[0]) as string
+        const comment = matches?.groups?.comment.trim() ?? undefined
         return {
             content: content.trim(),
             comment,
@@ -76,14 +71,6 @@ const parseBlock = (block: string[]): IBlock => {
         content: content.trim(),
         children: parseBlocksByLines(block).map((b) => parseBlock(b)),
     }
-}
-
-interface IAST extends IBlock {
-    children: IAST[]
-    type: string
-    deep: number
-    command: string
-    args: string[]
 }
 
 const transformAstByBlocks = (blocks: IBlock[], index = 0): IAST[] => {
@@ -116,8 +103,9 @@ const transformAstByBlocks = (blocks: IBlock[], index = 0): IAST[] => {
         const type = getType(block)
         return {
             ...block,
-            command: type === 'directive' ? command : '',
-            args: type === 'directive' ? args : [],
+            comment: block.comment || '',
+            command: type === AstType.DIRECTIVE ? command : '',
+            args: type === AstType.DIRECTIVE ? args : [],
             type,
             deep: index,
             children: transformAstByBlocks(block.children, index + 1),

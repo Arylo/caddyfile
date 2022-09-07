@@ -1,0 +1,24 @@
+# This is one default test file
+
+localhost # global
+{
+    email you@yours.com
+    acme_ca https://caddyserver.com/docs/caddyfile
+}
+(aSnippet) {
+    # this is a reusable snippet
+}
+example.com {
+    @post {
+        method POST
+    }
+    reverse_proxy @post localhost:9001 localhost:9002 {
+        lb_policy first
+    }
+    file_server /static
+    import aSnippet
+}
+www.example.com {
+    redir https://example.com{uri}
+    import aSnippet
+}
