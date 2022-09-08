@@ -1,5 +1,8 @@
+import debug from 'debug'
 import AstType from '../AstType'
 import { IBlock, IAST } from '../type'
+
+const log = debug('caddyfile')
 
 const isEnd = (c: string) => c === '\n'
 
@@ -15,6 +18,7 @@ const parseToLines = (content: string) => {
         }
     }
     if (str.length) filelines.push(str)
+    log.extend('lines')(JSON.stringify(filelines, null, 2))
     return filelines
 }
 
@@ -40,6 +44,7 @@ const parseBlocksByLines = (lines: string[]) => {
             level = -1
         }
     }
+    log.extend('blocks')(JSON.stringify(blocks, null, 2))
     return blocks
 }
 
@@ -114,6 +119,7 @@ const transformAstByBlocks = (blocks: IBlock[], index = 0): IAST[] => {
 }
 const parseAstByBlock = (blocks: string[][]) => {
     const tree = blocks.map(b => parseBlock(b))
+    log.extend('tree')(JSON.stringify(tree, null, 2))
     return transformAstByBlocks(tree)
 }
 
